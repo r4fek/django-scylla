@@ -1,0 +1,12 @@
+{
+  "_template": "gh:cjolowicz/cookiecutter-hypermodern-python",
+  "author": "Rafa\u0142 Furma\u0144ski",
+  "development_status": "Development Status :: 3 - Alpha",
+  "email": "r.furmanski@gmail.com",
+  "friendly_name": "Django Scylla",
+  "github_user": "r4fek",
+  "license": "MIT",
+  "package_name": "django_scylla",
+  "project_name": "django-scylla",
+  "version": "0.0.1"
+}

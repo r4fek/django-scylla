@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  scylla:
+    image: scylladb/scylla:latest
+    restart: always
+    command: --smp 1 --memory 750M --overprovisioned 1
+    ports:
+      - "7000:7000"
+      - "7001:7001"
+      - "7199:7199"
+      - "9042:9042"
+      - "10000:10000"
+    environment:
+      - SCYLLA_API_ADDR="-a 0.0.0.0"
+      - SCYLLA_API_PORT="-p 10000"
+      - SCYLLA_JMX_PORT="-jp 7199"
