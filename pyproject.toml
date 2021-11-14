@@ -21,7 +21,7 @@ Changelog = "https://github.com/r4fek/django-scylla/releases"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
-click = "^8.0.1"
+click = "^8.0.3"
 Django = "^3.0"
 
 [tool.poetry.dev-dependencies]
@@ -44,7 +44,7 @@ pep8-naming = "^0.12.1"
 darglint = "^1.8.0"
 reorder-python-imports = "^2.6.0"
 pre-commit-hooks = "^4.0.1"
-sphinx-rtd-theme = "^0.5.2"
+sphinx-rtd-theme = "^1.0.0"
 sphinx-click = "^3.0.1"
 Pygments = "^2.10.0"
 
