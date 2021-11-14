@@ -21,7 +21,7 @@ Changelog = "https://github.com/r4fek/django-scylla/releases"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
-click = "^8.0.1"
+click = "^8.0.3"
 Django = "^3.0"
 
 [tool.poetry.dev-dependencies]
