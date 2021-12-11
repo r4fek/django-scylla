@@ -131,7 +131,7 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     has_case_insensitive_like = True
 
     # Suffix for backends that don't support "SELECT xxx;" queries.
-    bare_select_suffix = ''
+    bare_select_suffix = ""
 
     # If NULL is implied on columns without needing to be explicitly specified
     implied_column_null = False
@@ -251,10 +251,10 @@ class DatabaseFeatures(BaseDatabaseFeatures):
 
     # Collation names for use by the Django test suite.
     test_collations = {
-        'ci': None,  # Case-insensitive.
-        'cs': None,  # Case-sensitive.
-        'non_default': None,  # Non-default.
-        'swedish_ci': None  # Swedish case-insensitive.
+        "ci": None,  # Case-insensitive.
+        "cs": None,  # Case-sensitive.
+        "non_default": None,  # Non-default.
+        "swedish_ci": None,  # Swedish case-insensitive.
     }
 
     # A set of dotted paths to tests in Django's test suite that are expected

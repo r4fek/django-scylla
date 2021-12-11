@@ -12,47 +12,48 @@ from .validation import DatabaseValidation
 
 class DatabaseWrapper(BaseDatabaseWrapper):
     """Represent a database connection."""
-    vendor = 'scylladb'
-    display_name = 'ScyllaDB'
+
+    vendor = "scylladb"
+    display_name = "ScyllaDB"
 
     # Mapping of Field objects to their column types.
     data_types = {
-        'AutoField': 'uuid',
-        'BigAutoField': 'uuid',
-        'BinaryField': 'blob',
-        'BooleanField': 'boolean',
-        'CharField': 'varchar(%(max_length)s)',
-        'DateField': 'date',
-        'DateTimeField': 'time',
-        'DecimalField': 'decimal',
-        'DurationField': 'duration',
-        'FileField': 'varchar(%(max_length)s)',
-        'FilePathField': 'varchar(%(max_length)s)',
-        'FloatField': 'float',
-        'IntegerField': 'int',
-        'BigIntegerField': 'bigint',
-        'IPAddressField': 'inet',
-        'GenericIPAddressField': 'inet',
-        'JSONField': 'text',
-        'OneToOneField': 'bigint',
-        'PositiveBigIntegerField': 'bigint',
-        'PositiveIntegerField': 'int',
-        'PositiveSmallIntegerField': 'tinyint',
-        'SlugField': 'varchar(%(max_length)s)',
-        'SmallAutoField': 'int',
-        'SmallIntegerField': 'tinyint',
-        'TextField': 'text',
-        'TimeField': 'time',
-        'UUIDField': 'uuid',
+        "AutoField": "uuid",
+        "BigAutoField": "uuid",
+        "BinaryField": "blob",
+        "BooleanField": "boolean",
+        "CharField": "varchar(%(max_length)s)",
+        "DateField": "date",
+        "DateTimeField": "time",
+        "DecimalField": "decimal",
+        "DurationField": "duration",
+        "FileField": "varchar(%(max_length)s)",
+        "FilePathField": "varchar(%(max_length)s)",
+        "FloatField": "float",
+        "IntegerField": "int",
+        "BigIntegerField": "bigint",
+        "IPAddressField": "inet",
+        "GenericIPAddressField": "inet",
+        "JSONField": "text",
+        "OneToOneField": "bigint",
+        "PositiveBigIntegerField": "bigint",
+        "PositiveIntegerField": "int",
+        "PositiveSmallIntegerField": "tinyint",
+        "SlugField": "varchar(%(max_length)s)",
+        "SmallAutoField": "int",
+        "SmallIntegerField": "tinyint",
+        "TextField": "text",
+        "TimeField": "time",
+        "UUIDField": "uuid",
     }
 
     operators = {
-        'exact': '= %s',
-        'contains': 'CONTAINS %s',
-        'gt': '> %s',
-        'gte': '>= %s',
-        'lt': '< %s',
-        'lte': '<= %s',
+        "exact": "= %s",
+        "contains": "CONTAINS %s",
+        "gt": "> %s",
+        "gte": ">= %s",
+        "lt": "< %s",
+        "lte": "<= %s",
     }
 
     Database = Database
