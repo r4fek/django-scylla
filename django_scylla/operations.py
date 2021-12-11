@@ -1,4 +1,4 @@
-from django.db.backends.base import BaseDatabaseOperations
+from django.db.backends.base.operations import BaseDatabaseOperations
 
 
 class DatabaseOperations(BaseDatabaseOperations):

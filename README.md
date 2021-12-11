@@ -1,0 +1,1 @@
+# django-scylla (WIP)

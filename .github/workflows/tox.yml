@@ -1,0 +1,71 @@
+name: Django Scylla
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  format:
+    name: Check formatting
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toxenv: [fmt,lint,mypy]
+    env:
+      TOXENV: ${{ matrix.toxenv }}
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+
+      - name: Install and run tox
+        run: |
+          pip install tox
+          tox
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.9]
+        django: [30,31,32,40,main]
+
+    env:
+      TOXENV: py${{ matrix.python }}-django${{ matrix.django }}
+
+    services:
+      scylla:
+        image: scylladb/scylla:latest
+        env:
+          SCYLLA_API_ADDR: "-a 0.0.0.0"
+          SCYLLA_API_PORT: "-p 10000"
+          SCYLLA_JMX_PORT: "-jp 7199"
+        ports:
+          - 7000:7000
+          - 7001:7001
+          - 7199:7199
+          - 9042:9042
+          - 10000:10000
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install and run tox
+        run: |
+          pip install tox
+          tox
