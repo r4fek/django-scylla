@@ -9,9 +9,7 @@ class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
     """
 
     def skip_default(self, field):
-        """
-        ScyllaDB doesn't accept default values for columns
-        """
+        """ScyllaDB doesn't accept default values for columns"""
         return True
 
     def skip_default_on_alter(self, field):

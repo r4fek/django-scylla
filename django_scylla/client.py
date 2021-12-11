@@ -1,4 +1,4 @@
-import subprocess
+import subprocess  # nosec
 
 from django.db.backends.base.client import BaseDatabaseClient
 
@@ -17,4 +17,4 @@ class DatabaseClient(BaseDatabaseClient):
             args += ["-u", settings_dict["USER"]]
         args += ["-k", settings_dict["NAME"]]
 
-        subprocess.call(args)
+        subprocess.call(args)  # nosec
