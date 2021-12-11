@@ -8,6 +8,20 @@ jobs:
   tests:
     name: ${{ matrix.session }} ${{ matrix.python-version }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    services:
+      scylla:
+        image: scylladb/scylla:latest
+        command: --smp 1 --memory 750M --overprovisioned 1
+        env:
+          SCYLLA_API_ADDR="-a 0.0.0.0"
+          SCYLLA_API_PORT="-p 10000"
+          SCYLLA_JMX_PORT="-jp 7199"
+        ports:
+          - 7000:7000
+          - 7001:7001
+          - 7199:7199
+          - 9042:9042
+          - 10000:10000
     strategy:
       fail-fast: false
       matrix:
@@ -22,8 +36,6 @@ jobs:
           - { python-version: 3.8, os: ubuntu-latest, session: "tests" }
           - { python-version: 3.7, os: ubuntu-latest, session: "tests" }
           - { python-version: 3.6, os: ubuntu-latest, session: "tests" }
-          - { python-version: 3.9, os: windows-latest, session: "tests" }
-          - { python-version: 3.9, os: macos-latest, session: "tests" }
           - { python-version: 3.9, os: ubuntu-latest, session: "typeguard" }
           - { python-version: 3.9, os: ubuntu-latest, session: "xdoctest" }
           - { python-version: 3.9, os: ubuntu-latest, session: "docs-build" }

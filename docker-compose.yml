@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   scylla:
-    image: scylladb/scylla:latest
+    image:    
     restart: always
     command: --smp 1 --memory 750M --overprovisioned 1
     ports:
