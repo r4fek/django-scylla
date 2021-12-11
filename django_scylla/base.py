@@ -1,6 +1,5 @@
-from django.db.backends.base.base import BaseDatabaseWrapper
-
 from cassandra.connection import Connection as Database
+from django.db.backends.base.base import BaseDatabaseWrapper
 
 from .client import DatabaseClient
 from .creation import DatabaseCreation
