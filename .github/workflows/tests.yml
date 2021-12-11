@@ -13,9 +13,9 @@ jobs:
         image: scylladb/scylla:latest
         options: --smp 1 --memory 750M --overprovisioned 1
         env:
-          SCYLLA_API_ADDR="-a 0.0.0.0"
-          SCYLLA_API_PORT="-p 10000"
-          SCYLLA_JMX_PORT="-jp 7199"
+          SCYLLA_API_ADDR: "-a 0.0.0.0"
+          SCYLLA_API_PORT: "-p 10000"
+          SCYLLA_JMX_PORT: "-jp 7199"
         ports:
           - 7000:7000
           - 7001:7001
