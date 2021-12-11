@@ -11,7 +11,7 @@ jobs:
     services:
       scylla:
         image: scylladb/scylla:latest
-        command: --smp 1 --memory 750M --overprovisioned 1
+        options: --smp 1 --memory 750M --overprovisioned 1
         env:
           SCYLLA_API_ADDR="-a 0.0.0.0"
           SCYLLA_API_PORT="-p 10000"
