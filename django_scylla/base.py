@@ -1,6 +1,7 @@
-from cassandra.connection import Connection as Database
+from cassandra.auth import PlainTextAuthProvider
 from django.db.backends.base.base import BaseDatabaseWrapper
 
+from . import database as Database
 from .client import DatabaseClient
 from .creation import DatabaseCreation
 from .features import DatabaseFeatures
@@ -67,3 +68,38 @@ class DatabaseWrapper(BaseDatabaseWrapper):
     validation_class = DatabaseValidation
 
     queries_limit = 9000
+
+    def get_connection_params(self):
+        """Return a dict of parameters suitable for get_new_connection."""
+        options = self.settings_dict.get("OPTIONS", {})
+
+        if not options.get("contact_points"):
+            options["contact_points"] = self.settings_dict["HOST"].split(",")
+        if not options.get("port") and self.settings_dict.get("PORT"):
+            options["port"] = int(self.settings_dict["PORT"])
+        if options.get("auth_provider") is None and (
+                self.settings_dict.get("USER") and self.settings_dict.get("PASSWORD")):
+            options["auth_provider"] = PlainTextAuthProvider(
+                username=self.settings_dict["USER"],
+                password=self.settings_dict["PASSWORD"],
+            )
+
+        return options
+
+    def get_new_connection(self, conn_params):
+        """Open a connection to the database."""
+        db = self.settings_dict["NAME"]
+        cluster = Database.initialize(db, **conn_params)
+        return cluster.connect(db)
+
+    def init_connection_state(self):
+        """Initialize the database connection settings."""
+        ...
+
+    def create_cursor(self, name=None):
+        """Create a cursor. Assume that a connection is established."""
+        self.connection.set_keyspace(name)
+        return self.connection
+
+    def _set_autocommit(self, autocommit):
+        ...

@@ -21,7 +21,7 @@ DATABASES = {
         "ENGINE": "django_scylla",
         "HOST": "localhost",
         "PORT": 9042,
-        "NAME": "testdb",
+        "NAME": "demo",
     },
 }
 
