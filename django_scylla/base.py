@@ -3,6 +3,7 @@ from django.db.backends.base.base import BaseDatabaseWrapper
 
 from . import database as Database
 from .client import DatabaseClient
+from .connection import ConnectionWrapper
 from .creation import DatabaseCreation
 from .features import DatabaseFeatures
 from .introspection import DatabaseIntrospection
@@ -83,6 +84,8 @@ class DatabaseWrapper(BaseDatabaseWrapper):
                 username=self.settings_dict["USER"],
                 password=self.settings_dict["PASSWORD"],
             )
+        if options.get("protocol_version") is None:
+            options["protocol_version"] = 3
 
         return options
 
@@ -90,7 +93,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         """Open a connection to the database."""
         db = self.settings_dict["NAME"]
         cluster = Database.initialize(db, **conn_params)
-        return cluster.connect(db)
+        return ConnectionWrapper(cluster.connect(db))
 
     def init_connection_state(self):
         """Initialize the database connection settings."""
@@ -98,7 +101,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     def create_cursor(self, name=None):
         """Create a cursor. Assume that a connection is established."""
-        self.connection.set_keyspace(name)
+        self.connection.set_keyspace(name or self.settings_dict["NAME"])
         return self.connection
 
     def _set_autocommit(self, autocommit):
