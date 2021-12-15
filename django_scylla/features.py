@@ -134,7 +134,7 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     bare_select_suffix = ""
 
     # If NULL is implied on columns without needing to be explicitly specified
-    implied_column_null = False
+    implied_column_null = True
 
     # Does the backend support "select for update" queries with limit (and offset)?
     supports_select_for_update_with_limit = False
@@ -218,7 +218,7 @@ class DatabaseFeatures(BaseDatabaseFeatures):
 
     # Does the database allow more than one constraint or index on the same
     # field(s)?
-    allows_multiple_constraints_on_same_fields = True
+    allows_multiple_constraints_on_same_fields = False
 
     # Does the backend support boolean expressions in SELECT and GROUP BY
     # clauses?

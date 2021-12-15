@@ -1,3 +1,6 @@
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ConnectionWrapper:
@@ -7,5 +10,13 @@ class ConnectionWrapper:
     def close(self):
         ...
 
+    @property
+    def keyspace(self):
+        return self.session.keyspace
+
     def set_keyspace(self, name):
         return self.session.set_keyspace(name)
+
+    def execute(self, query, parameters=None):
+        logger.debug(f"QUERY: {query}, {parameters}")
+        return self.session.execute(query, parameters=parameters)
