@@ -1,3 +1,5 @@
+import calendar
+
 from django.db.backends.base.operations import BaseDatabaseOperations
 
 
@@ -6,6 +8,7 @@ class DatabaseOperations(BaseDatabaseOperations):
     Encapsulate backend-specific differences, such as the way a backend
     performs ordering or calculates the ID of a recently-inserted row.
     """
+    compiler_module = "django_scylla.cql.compiler"
 
     def quote_name(self, name):
         """
@@ -15,3 +18,12 @@ class DatabaseOperations(BaseDatabaseOperations):
         if name.startswith('"') and name.endswith('"'):
             return name
         return f'"{name}"'
+
+    def adapt_datetimefield_value(self, value):
+        """
+        Converts `datetime.datetime` object to the 64-bit signed integer
+        representing a number of milliseconds since the standard base time.
+        @see more: https://docs.scylladb.com/getting-started/types/#working-with-timestamps
+        """
+        ts = calendar.timegm(value.utctimetuple())
+        return str(int(ts * 1e3 + getattr(value, 'microsecond', 0) / 1e3))

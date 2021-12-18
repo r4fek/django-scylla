@@ -20,8 +20,8 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     # Mapping of Field objects to their column types.
     data_types = {
-        "AutoField": "uuid",
-        "BigAutoField": "uuid",
+        "AutoField": "bigint",
+        "BigAutoField": "bigint",
         "BinaryField": "blob",
         "BooleanField": "boolean",
         "CharField": "text",

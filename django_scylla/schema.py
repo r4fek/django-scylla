@@ -10,8 +10,7 @@ class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
     sql_create_table = "CREATE TABLE IF NOT EXISTS %(table)s (%(definition)s)"
 
     def skip_default(self, field):
-        """ScyllaDB doesn't accept default values for columns"""
-        return True
+        return False
 
     def skip_default_on_alter(self, field):
         return True

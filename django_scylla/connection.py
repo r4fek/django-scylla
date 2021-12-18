@@ -6,6 +6,7 @@ logger = logging.getLogger(__name__)
 class ConnectionWrapper:
     def __init__(self, session):
         self.session = session
+        self.result = None
 
     def close(self):
         ...
@@ -19,4 +20,9 @@ class ConnectionWrapper:
 
     def execute(self, query, parameters=None):
         logger.debug(f"QUERY: {query}, {parameters}")
-        return self.session.execute(query, parameters=parameters)
+        self.result = self.session.execute(query, parameters=parameters)
+        return self.result
+
+    @property
+    def lastrowid(self):
+        ...
