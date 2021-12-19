@@ -8,6 +8,8 @@ class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
     renaming, index fiddling, and so on.
     """
     sql_create_table = "CREATE TABLE IF NOT EXISTS %(table)s (%(definition)s)"
+    sql_create_index = "CREATE INDEX IF NOT EXISTS %(name)s ON %(table)s (%(columns)s)"
+    sql_delete_column = "ALTER TABLE %(table)s DROP %(column)s"
 
     def skip_default(self, field):
         return False
@@ -27,7 +29,7 @@ class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
         # Check for fields that aren't actually columns (e.g. M2M)
         if sql is None:
             return None, None
-        if field.primary_key or field.unique:
+        if field.primary_key:
             sql += " PRIMARY KEY"
 
         # Optionally add the tablespace if it's an implicitly indexed column
@@ -38,7 +40,20 @@ class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
         return sql, params
 
     def add_constraint(self, model, constraint):
-        return None  # TODO: fix it
+        ...  # TODO: fix it
 
     def alter_unique_together(self, model, old_unique_together, new_unique_together):
+        ...
+
+    def alter_index_together(self, model, old_index_together, new_index_together):
         return None
+
+    def _create_unique_sql(self, *args, **kwargs):
+        # TODO: fix it
+        return ''
+
+    def _create_index_name(self, table_name, column_names, suffix=""):
+        return f"{table_name}_by_{'_'.join(column_names)}"
+
+    def _alter_column_null_sql(self, model, old_field, new_field):
+        return ''

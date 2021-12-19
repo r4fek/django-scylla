@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ConnectionWrapper:
+class Cursor:
     def __init__(self, session):
         self.session = session
         self.result = None
@@ -19,7 +19,9 @@ class ConnectionWrapper:
         return self.session.set_keyspace(name)
 
     def execute(self, query, parameters=None):
-        logger.debug(f"QUERY: {query}, {parameters}")
+        if not query:
+            return None
+        logger.debug(f"QUERY {query}, params {parameters}")
         self.result = self.session.execute(query, parameters=parameters)
         return self.result
 

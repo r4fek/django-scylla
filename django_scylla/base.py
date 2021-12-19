@@ -3,8 +3,8 @@ from django.db.backends.base.base import BaseDatabaseWrapper
 
 from . import database as Database
 from .client import DatabaseClient
-from .connection import ConnectionWrapper
 from .creation import DatabaseCreation
+from .cursor import Cursor
 from .features import DatabaseFeatures
 from .introspection import DatabaseIntrospection
 from .operations import DatabaseOperations
@@ -93,7 +93,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         """Open a connection to the database."""
         db = self.settings_dict["NAME"]
         cluster = Database.initialize(db, **conn_params)
-        return ConnectionWrapper(cluster.connect(db))
+        return Cursor(cluster.connect(db))
 
     def init_connection_state(self):
         """Initialize the database connection settings."""
@@ -105,4 +105,10 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         return self.connection
 
     def _set_autocommit(self, autocommit):
+        ...
+
+    def _commit(self):
+        ...
+
+    def _rollback(self):
         ...
