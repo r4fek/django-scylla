@@ -27,3 +27,8 @@ class DatabaseOperations(BaseDatabaseOperations):
         """
         ts = calendar.timegm(value.utctimetuple())
         return str(int(ts * 1e3 + getattr(value, 'microsecond', 0) / 1e3))
+
+    def bulk_insert_sql(self, fields, placeholder_rows):
+        return ' '.join(
+            'VALUES (%s)' % ', '.join(row)
+            for row in placeholder_rows)

@@ -17,6 +17,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     vendor = "scylladb"
     display_name = "ScyllaDB"
+    DEFAULT_PROTOCOL_VERSION = 4
 
     # Mapping of Field objects to their column types.
     data_types = {
@@ -85,7 +86,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
                 password=self.settings_dict["PASSWORD"],
             )
         if options.get("protocol_version") is None:
-            options["protocol_version"] = 3
+            options["protocol_version"] = self.DEFAULT_PROTOCOL_VERSION
 
         return options
 
