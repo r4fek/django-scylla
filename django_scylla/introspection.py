@@ -9,6 +9,6 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         keyspace = cursor.keyspace
 
         return [
-            TableInfo(c.table_name, "t") for c in cursor.execute(
+            TableInfo(c[0], "t") for c in cursor.execute(
                 f"SELECT table_name FROM system_schema.tables WHERE keyspace_name='{keyspace}'")
         ]
