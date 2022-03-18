@@ -22,7 +22,7 @@ class DatabaseOperations(BaseDatabaseOperations):
 
     def adapt_datetimefield_value(self, value):
         """
-        Converts `datetime.datetime` object to the 64-bit signed integer
+        Convert `datetime.datetime` object to the 64-bit signed integer
         representing a number of milliseconds since the standard base time.
         @see more: https://docs.scylladb.com/getting-started/types/#working-with-timestamps
         """
