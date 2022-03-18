@@ -2,6 +2,7 @@ from time import time
 
 from django.db.models import AutoField
 from django.db.models.sql import compiler
+
 from django_scylla.cql.where import WhereNode
 
 
