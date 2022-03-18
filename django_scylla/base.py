@@ -80,7 +80,8 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         if not options.get("port") and self.settings_dict.get("PORT"):
             options["port"] = int(self.settings_dict["PORT"])
         if options.get("auth_provider") is None and (
-                self.settings_dict.get("USER") and self.settings_dict.get("PASSWORD")):
+            self.settings_dict.get("USER") and self.settings_dict.get("PASSWORD")
+        ):
             options["auth_provider"] = PlainTextAuthProvider(
                 username=self.settings_dict["USER"],
                 password=self.settings_dict["PASSWORD"],

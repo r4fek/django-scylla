@@ -10,7 +10,7 @@ def initialize(db, **kwargs):
     try:
         return clients[db]
     except KeyError:
-        logger.debug('Initialize ScyllaDB connection')
+        logger.debug("Initialize ScyllaDB connection")
         clients[db] = Cluster(**kwargs)
     return clients[db]
 

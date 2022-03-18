@@ -30,7 +30,11 @@ class SQLCompiler(compiler.SQLCompiler):
 class SQLInsertCompiler(compiler.SQLInsertCompiler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        pk_fields = [f for f in self.query.model._meta.get_fields() if getattr(f, "primary_key", False)]
+        pk_fields = [
+            f
+            for f in self.query.model._meta.get_fields()
+            if getattr(f, "primary_key", False)
+        ]
         self.query.fields = pk_fields + self.query.fields
 
     def prepare_value(self, field, value):
