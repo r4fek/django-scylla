@@ -8,14 +8,18 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     can_use_chunked_reads = True
     can_return_columns_from_insert = False
     can_return_rows_from_bulk_insert = False
-    has_bulk_insert = True
+    has_bulk_insert = False
     uses_savepoints = True
     can_release_savepoints = False
 
     supports_subqueries_in_group_by = False
 
+    # If True, don't use integer foreign keys referring to, e.g., positive
+    # integer primary keys.
+    related_fields_match_type = True
+
     # Does the backend ignore unnecessary ORDER BY clauses in subqueries?
-    ignores_unnecessary_order_by_in_subqueries = False
+    ignores_unnecessary_order_by_in_subqueries = True
 
     # Is there a true datatype for uuid?
     has_native_uuid_field = True

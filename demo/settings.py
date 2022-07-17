@@ -24,6 +24,8 @@ DATABASES = {
     },
 }
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 MIDDLEWARE = [
     # default django middleware
     "django.contrib.sessions.middleware.SessionMiddleware",

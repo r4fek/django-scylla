@@ -3,8 +3,6 @@ from time import time
 from django.db.models import AutoField
 from django.db.models.sql import compiler
 
-from django_scylla.cql.where import WhereNode
-
 
 def unique_rowid():
     # TODO: guarantee that this is globally unique
@@ -12,13 +10,6 @@ def unique_rowid():
 
 
 class SQLCompiler(compiler.SQLCompiler):
-    def __init__(self, query, connection, using, elide_empty=True):
-        query.where = WhereNode()
-        super().__init__(query, connection, using, elide_empty=True)
-
-    def compile(self, node):
-        return super().compile(node)
-
     def as_sql(self, *args, **kwargs):
         result, params = super().as_sql(*args, **kwargs)
         # Append ALLOW FILTERING to all select queries
@@ -26,6 +17,12 @@ class SQLCompiler(compiler.SQLCompiler):
         if params:
             result += " ALLOW FILTERING"
         return result, params
+
+    def get_order_by(self):
+        res = super().get_order_by()
+        print("get_order_by", res)
+        # TODO: fix this!
+        return []
 
 
 class SQLInsertCompiler(compiler.SQLInsertCompiler):
