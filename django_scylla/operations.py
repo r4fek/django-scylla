@@ -26,6 +26,8 @@ class DatabaseOperations(BaseDatabaseOperations):
         representing a number of milliseconds since the standard base time.
         @see more: https://docs.scylladb.com/getting-started/types/#working-with-timestamps
         """
+        if value is None:
+            return None
         ts = calendar.timegm(value.utctimetuple())
         return str(int(ts * 1e3 + getattr(value, "microsecond", 0) / 1e3))
 

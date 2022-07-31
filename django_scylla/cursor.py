@@ -19,9 +19,22 @@ class Cursor:
     def close(self):
         ...
 
+    def __iter__(self):
+        print("iter result")
+        return iter(self.result)
+
     @property
     def keyspace(self):
         return self.session.keyspace
+
+    @property
+    def rowcount(self):
+        print("rowcount", res := len(self.result.all()))
+        if self.result is None:
+            raise RuntimeError
+
+        # TODO: possibly not optimal
+        return res
 
     def set_keyspace(self, name: str):
         return self.session.set_keyspace(name)
@@ -35,15 +48,20 @@ class Cursor:
 
     def fetchmany(self, size=1):
         if size == 1:
+            print("fetchmany fetchone")
             return self.fetchone()
-        return self.result.all()[:size]
+        res = self.result.all()[:size]
+        print("fetchmany", res)
+        return res
 
     def fetchone(self):
         return self.result.one()
 
     def fetchall(self):
+        print("fetchall")
         return self.result.all()
 
     @property
     def lastrowid(self):
+        print("lastrowid")
         ...

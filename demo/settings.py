@@ -78,6 +78,6 @@ LOGGING = {
 }
 
 ROOT_URLCONF = "tests.urls"
-
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 if not DEBUG:
     raise Exception("This settings file can only be used with DEBUG=True")

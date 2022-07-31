@@ -8,3 +8,9 @@ class WhereNode(where.WhereNode):
         if res and res[0] == "(" and res[-1] == ")":
             return res[1:-1], params
         return res, params
+
+
+class ExtraWhere(where.ExtraWhere):
+    def as_sql(self, compiler=None, connection=None):
+        sqls = ["%s" % sql for sql in self.sqls]
+        return " AND ".join(sqls), list(self.params or ())

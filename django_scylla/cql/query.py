@@ -1,6 +1,6 @@
 import logging
 
-from django.db.models import sql
+from django.db.models import Count, sql
 from django.db.models.sql.datastructures import BaseTable
 
 from django_scylla.cql.where import WhereNode
@@ -46,5 +46,24 @@ class Query(sql.query.Query):
         if len(ordering) > 1:
             ordering = ordering[0]
         return super().add_ordering(*ordering)
+
+    def exists(self, using, limit=True):
+        q = self.clone()
+        if not q.distinct:
+            if q.group_by is True:
+                q.add_fields(
+                    (f.attname for f in self.model._meta.concrete_fields), False
+                )
+                # Disable GROUP BY aliases to avoid orphaning references to the
+                # SELECT clause which is about to be cleared.
+                q.set_group_by(allow_aliases=False)
+            q.clear_select_clause()
+        q.clear_ordering(force=True)
+        if limit:
+            q.set_limits(high=1)
+        q.add_extra({"a": "count(*)"}, None, None, None, None, None)
+        q.set_extra_mask(None)
+        return q
+
 
 sql.Query = Query

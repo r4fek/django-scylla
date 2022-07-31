@@ -9,6 +9,7 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     can_return_columns_from_insert = False
     can_return_rows_from_bulk_insert = False
     has_bulk_insert = False
+    has_select_for_update = False
     uses_savepoints = True
     can_release_savepoints = False
 
