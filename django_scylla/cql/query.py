@@ -1,6 +1,6 @@
 import logging
 
-from django.db.models import Count, sql
+from django.db.models import sql
 from django.db.models.sql.datastructures import BaseTable
 
 from django_scylla.cql.where import WhereNode
@@ -33,6 +33,9 @@ class Query(sql.query.Query):
         )
         return join_info
 
+    def clear_where(self):
+        self.where = WhereNode()
+
     def trim_start(self, names_with_path):
         self._lookup_joins = []
         return super().trim_start(names_with_path)
@@ -44,8 +47,11 @@ class Query(sql.query.Query):
 
     def add_ordering(self, *ordering):
         if len(ordering) > 1:
-            ordering = ordering[0]
+            ordering = [ordering[0]]
         return super().add_ordering(*ordering)
+
+    def add_select_related(self, fields):
+        ...
 
     def exists(self, using, limit=True):
         q = self.clone()

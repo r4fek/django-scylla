@@ -22,8 +22,8 @@ Changelog = "https://github.com/r4fek/django-scylla/releases"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-django = "^3.0 || ^4.0"
-scylla-driver = "^3.24"
+django = "^3.0 || ^4.0 || ^4.1"
+scylla-driver = "^3.25"
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}

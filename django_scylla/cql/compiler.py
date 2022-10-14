@@ -4,7 +4,6 @@ from django.core.exceptions import EmptyResultSet
 from django.db import NotSupportedError
 from django.db.models import AutoField
 from django.db.models.sql import compiler
-from django.db.transaction import TransactionManagementError
 
 
 def unique_rowid():
