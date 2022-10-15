@@ -5,6 +5,7 @@ Django-scylla makes possible to connect your Django app to Cassandra or ScyllaDB
 
 [![Latest version](https://img.shields.io/pypi/v/django-scylla.svg "Latest version")](https://pypi.python.org/pypi/django-scylla/)
 ![workflow](https://github.com/r4fek/django-scylla/actions/workflows/tox.yml/badge.svg)
+
 Discord: https://discord.gg/pxunMGmDNc
 
 ## Sponsors ##
@@ -20,7 +21,7 @@ Recommended installation:
 
 1. Add `django_scylla` to `INSTALLED_APPS` in your `settings.py` file:
 
-        INSTALLED_APPS = ('django_cassandra_engine',) + INSTALLED_APPS
+        INSTALLED_APPS = ('django_scylla',) + INSTALLED_APPS
 
 2. Change `DATABASES` setting:
 
