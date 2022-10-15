@@ -4,6 +4,7 @@ max-complexity = 8
 # http://flake8.pycqa.org/en/2.5.5/warnings.html#warning-error-codes
 ignore =
   # pydocstyle - docstring conventions (PEP257)
+  C901  # too complex
   D100	# Missing docstring in public module
   D101	# Missing docstring in public class
   D102	# Missing docstring in public method

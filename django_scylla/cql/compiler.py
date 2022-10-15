@@ -72,8 +72,6 @@ class SQLCompiler(compiler.SQLCompiler):
                     params += distinct_params
 
                 out_cols = []
-                col_idx = 1
-                print("self.select", self.select)
                 for _, (s_sql, s_params), alias in self.select:
                     params.extend(s_params)
                     if s_sql[0] == "(" and s_sql[-1] == ")":
@@ -131,38 +129,7 @@ class SQLCompiler(compiler.SQLCompiler):
                 result.append(for_update_part)
 
             if self.query.subquery and extra_select:
-                # If the query is used as a subquery, the extra selects would
-                # result in more columns than the left-hand side expression is
-                # expecting. This can happen when a subquery uses a combination
-                # of order_by() and distinct(), forcing the ordering expressions
-                # to be selected as well. Wrap the query in another subquery
-                # to exclude extraneous selects.
-                sub_selects = []
-                sub_params = []
-                for index, (select, _, alias) in enumerate(self.select, start=1):
-                    if not alias and with_col_aliases:
-                        alias = "col%d" % index
-                    if alias:
-                        sub_selects.append(
-                            "%s.%s"
-                            % (
-                                self.connection.ops.quote_name("subquery"),
-                                self.connection.ops.quote_name(alias),
-                            )
-                        )
-                    else:
-                        select_clone = select.relabeled_clone(
-                            {select.alias: "subquery"}
-                        )
-                        subselect, subparams = select_clone.as_sql(
-                            self, self.connection
-                        )
-                        sub_selects.append(subselect)
-                        sub_params.extend(subparams)
-                return "SELECT %s FROM (%s) subquery" % (
-                    ", ".join(sub_selects),
-                    " ".join(result),
-                ), tuple(sub_params + params)
+                raise NotSupportedError("Subqueries are not supported.")
 
             result.append("ALLOW FILTERING")
             return " ".join(result), tuple(params)
@@ -171,8 +138,6 @@ class SQLCompiler(compiler.SQLCompiler):
             self.query.reset_refcounts(refcounts_before)
 
     def get_order_by(self):
-        res = super().get_order_by()
-        print("get_order_by", res)
         # TODO: fix this!
         return []
 
