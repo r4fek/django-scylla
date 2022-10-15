@@ -198,3 +198,7 @@ class SQLUpdateCompiler(compiler.SQLUpdateCompiler):
         result, params = super().as_sql(*args, **kwargs)
         result += " IF EXISTS"
         return result, params
+
+
+class SQLDeleteCompiler(compiler.SQLDeleteCompiler):
+    ...

@@ -10,7 +10,7 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     can_return_rows_from_bulk_insert = False
     has_bulk_insert = False
     has_select_for_update = False
-    uses_savepoints = True
+    uses_savepoints = False
     can_release_savepoints = False
 
     supports_subqueries_in_group_by = False
