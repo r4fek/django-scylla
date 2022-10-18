@@ -1,6 +1,6 @@
 import logging
 
-from cassandra.cluster import ResultSet, Session, tuple_factory
+from cassandra.cluster import ResultSet, Session
 
 logger = logging.getLogger(__name__)
 
@@ -9,7 +9,6 @@ class Cursor:
     def __init__(self, session: Session):
         logger.debug("CURSOR: Initialize Cursor")
         self.session = session
-        self.session.row_factory = tuple_factory
         self.result: ResultSet = None
 
     def __del__(self):

@@ -1,5 +1,7 @@
 from os import path
 
+from cassandra import ConsistencyLevel
+
 DEBUG = True
 TEMPLATE_DEBUG = True
 USE_TZ = True
@@ -21,6 +23,7 @@ DATABASES = {
         "HOST": "localhost",
         "PORT": 9042,
         "NAME": "demo",
+        "OPTIONS": {"request_timeout": 5, "consistency_level": ConsistencyLevel.ONE},
     },
 }
 

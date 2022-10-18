@@ -13,10 +13,8 @@ class Query(sql.query.Query):
         super().__init__(*args, **kwargs)
         self.where = WhereNode()
 
-    def setup_joins(self, names, opts, alias, can_reuse=None, allow_many=True):
-        join_info = super().setup_joins(
-            names, opts, alias, can_reuse=can_reuse, allow_many=allow_many
-        )
+    def setup_joins(self, *args, **kwargs):
+        join_info = super().setup_joins(*args, **kwargs)
 
         def final_transformer(field, alias):
             if not self.alias_cols:
@@ -40,9 +38,9 @@ class Query(sql.query.Query):
         self._lookup_joins = []
         return super().trim_start(names_with_path)
 
-    def join(self, join, reuse=None):
+    def join(self, join, *args, **kwargs):
         if isinstance(join, BaseTable):
-            return super().join(join, reuse)
+            return super().join(join, *args, **kwargs)
         return [self.base_table]
 
     def add_ordering(self, *ordering):

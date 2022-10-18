@@ -32,10 +32,11 @@ Recommended installation:
                 'TEST_NAME': 'test_db',
                 'HOST': 'db1.example.com,db2.example.com,db3.example.com',
                 'OPTIONS': {
-                    'replication': {
-                        'strategy_class': 'NetworkTopologyStrategy',
-                        'dc1': 3
-                    }
+                    'consistency_level': ...,
+                    'load_balancing_policy': ...,
+                    'retry_policy': ...,
+                    'request_timeout': 10,
+
                 }
             }
         }
@@ -53,8 +54,8 @@ Recommended installation:
 
 
 4. Connect to ScyllaDB and create a keyspace.
-4. Run `./manage.py makemigrations && ./manage.py migrate`
-5. Done!
+5. Run `./manage.py makemigrations && ./manage.py migrate`
+6. Done!
 
 ## License ##
 Copyright (c) 2021-2022, [Rafał Furmański](https://linkedin.com/in/furmanski).

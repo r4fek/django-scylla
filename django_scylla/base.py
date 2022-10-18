@@ -1,4 +1,7 @@
 from cassandra.auth import PlainTextAuthProvider
+from cassandra.cluster import EXEC_PROFILE_DEFAULT, ExecutionProfile
+from cassandra.policies import RoundRobinPolicy, TokenAwarePolicy
+from cassandra.query import tuple_factory
 from django.db.backends.base.base import BaseDatabaseWrapper
 
 from . import database as Database
@@ -77,6 +80,14 @@ class DatabaseWrapper(BaseDatabaseWrapper):
     def get_connection_params(self):
         """Return a dict of parameters suitable for get_new_connection."""
         options = self.settings_dict.get("OPTIONS", {})
+        ep_keys = (
+            "load_balancing_policy",
+            "retry_policy",
+            "consistency_level",
+            "serial_consistency_level",
+            "request_timeout",
+            "speculative_execution_policy",
+        )
 
         if not options.get("contact_points"):
             options["contact_points"] = self.settings_dict["HOST"].split(",")
@@ -92,6 +103,14 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         if options.get("protocol_version") is None:
             options["protocol_version"] = self.DEFAULT_PROTOCOL_VERSION
 
+        ep_options = {k: options.pop(k, None) for k in ep_keys if options.get(k)}
+        ep_options["row_factory"] = tuple_factory
+        if "load_balancing_policy" not in ep_options:
+            ep_options["load_balancing_policy"] = TokenAwarePolicy(RoundRobinPolicy())
+
+        options["execution_profiles"] = {
+            EXEC_PROFILE_DEFAULT: ExecutionProfile(**ep_options)
+        }
         return options
 
     def get_new_connection(self, conn_params):
