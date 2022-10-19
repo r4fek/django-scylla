@@ -50,7 +50,9 @@ class Cursor:
         return res
 
     def fetchone(self):
-        return self.result.one()
+        res = self.result.one()
+        is_empty = len(res) == 1 and res[0] == 0
+        return None if is_empty else res
 
     def fetchall(self):
         return self.result.all()

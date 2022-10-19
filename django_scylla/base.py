@@ -1,5 +1,5 @@
 from cassandra.auth import PlainTextAuthProvider
-from cassandra.cluster import EXEC_PROFILE_DEFAULT, ExecutionProfile
+from cassandra.cluster import EXEC_PROFILE_DEFAULT, ExecutionProfile, ProtocolVersion
 from cassandra.policies import RoundRobinPolicy, TokenAwarePolicy
 from cassandra.query import tuple_factory
 from django.db.backends.base.base import BaseDatabaseWrapper
@@ -20,7 +20,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     vendor = "scylladb"
     display_name = "ScyllaDB"
-    DEFAULT_PROTOCOL_VERSION = 4
+    DEFAULT_PROTOCOL_VERSION = ProtocolVersion.V4
 
     # Mapping of Field objects to their column types.
     data_types = {

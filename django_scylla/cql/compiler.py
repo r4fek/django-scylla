@@ -148,9 +148,9 @@ class SQLInsertCompiler(compiler.SQLInsertCompiler):
         pk_fields = [
             f
             for f in self.query.model._meta.get_fields()
-            if getattr(f, "primary_key", False)
+            if getattr(f, "primary_key", False) and f not in self.query.fields
         ]
-        self.query.fields = pk_fields + self.query.fields
+        self.query.fields = pk_fields + list(self.query.fields)
 
     def prepare_value(self, field, value):
         if value is None and isinstance(field, AutoField):
