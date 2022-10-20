@@ -161,8 +161,11 @@ class SQLInsertCompiler(compiler.SQLInsertCompiler):
 class SQLUpdateCompiler(compiler.SQLUpdateCompiler):
     def as_sql(self, *args, **kwargs):
         result, params = super().as_sql(*args, **kwargs)
-        result += " IF EXISTS"
         return result, params
+
+    def execute_sql(self, result_type):
+        super().execute_sql(result_type)
+        return 1
 
 
 class SQLDeleteCompiler(compiler.SQLDeleteCompiler):
