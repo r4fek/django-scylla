@@ -677,7 +677,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0b172dd67eed46a3ea50f9d540e160ca88ceb03d8dab4f00adff32efba516207"
+content-hash = "cbceca66772ab1f2c197c5e248c6447aa53dc98caeeb704b9a75dc455841d98f"
 
 [metadata.files]
 asgiref = [
