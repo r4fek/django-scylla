@@ -55,6 +55,7 @@ jobs:
           - 7199:7199
           - 9042:9042
           - 10000:10000
+        options: --health-cmd "cqlsh --debug" --health-interval 5s --health-retries 10
 
     steps:
       - name: Check out the repository
