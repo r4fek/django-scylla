@@ -20,6 +20,14 @@ class DatabaseOperations(BaseDatabaseOperations):
             return name
         return f'"{name}"'
 
+    def prep_for_like_query(self, value):
+        """Does no conversion, parent string-cast is SQL specific."""
+        return value
+
+    def prep_for_iexact_query(self, value):
+        """Does no conversion, parent string-cast is SQL specific."""
+        return value
+
     def adapt_datetimefield_value(self, value):
         """
         Convert `datetime.datetime` object to the 64-bit signed integer
@@ -33,3 +41,19 @@ class DatabaseOperations(BaseDatabaseOperations):
 
     def bulk_insert_sql(self, fields, placeholder_rows):
         return " ".join("VALUES (%s)" % ", ".join(row) for row in placeholder_rows)
+
+    def sql_flush(self, style, tables, *args, **kwargs):
+        """
+        Truncate all existing tables in current keyspace.
+        :returns: an empty list
+        """
+        if tables:
+            cql_list = []
+
+            for table in tables:
+                cql_list.append(f"TRUNCATE {table}")
+            return cql_list
+        return []
+
+    def prepare_sql_script(self, sql):
+        return [sql]

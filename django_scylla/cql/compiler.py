@@ -15,6 +15,12 @@ class SQLCompiler(compiler.SQLCompiler):
     def get_extra_select(self, order_by, select):
         return []
 
+    def get_default_columns(self, **_):
+        """
+        Do not pull in related models (e.g. via select_related or joins)
+        """
+        return super().get_default_columns(None, None, None)
+
     def as_sql(self, with_limits=True, with_col_aliases=False):
         """
         Create the SQL for this query. Return the SQL string and list of

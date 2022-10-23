@@ -1,3 +1,5 @@
+from functools import cached_property
+
 from django.db.backends.base.features import BaseDatabaseFeatures
 
 
@@ -268,3 +270,7 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     # A map of reasons to sets of dotted paths to tests in Django's test suite
     # that should be skipped for this database.
     django_test_skips = {}
+
+    @cached_property
+    def supports_transactions(self):
+        return False

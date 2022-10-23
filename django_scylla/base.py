@@ -125,7 +125,9 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     def create_cursor(self, name=None):
         """Create a cursor. Assume that a connection is established."""
-        self.connection.set_keyspace(name or self.settings_dict["NAME"])
+        name = name or self.settings_dict["NAME"]
+        if name is not None:
+            self.connection.set_keyspace(name)
         return self.connection
 
     def _set_autocommit(self, autocommit):
