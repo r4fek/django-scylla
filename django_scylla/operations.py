@@ -21,11 +21,11 @@ class DatabaseOperations(BaseDatabaseOperations):
         return f'"{name}"'
 
     def prep_for_like_query(self, value):
-        """Does no conversion, parent string-cast is SQL specific."""
+        """Do no conversion, parent string-cast is SQL specific."""
         return value
 
     def prep_for_iexact_query(self, value):
-        """Does no conversion, parent string-cast is SQL specific."""
+        """Do no conversion, parent string-cast is SQL specific."""
         return value
 
     def adapt_datetimefield_value(self, value):

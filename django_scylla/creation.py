@@ -22,9 +22,7 @@ class DatabaseCreation(BaseDatabaseCreation):
             )
 
     def _create_test_db(self, verbosity, autoclobber, keepdb=False):
-        """
-        Internal implementation - create the test db tables.
-        """
+        """Create the test db tables."""
         test_database_name = self._get_test_db_name()
         test_db_params = {
             "dbname": self.connection.ops.quote_name(test_database_name),

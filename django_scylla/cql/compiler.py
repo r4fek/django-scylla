@@ -16,9 +16,7 @@ class SQLCompiler(compiler.SQLCompiler):
         return []
 
     def get_default_columns(self, **_):
-        """
-        Do not pull in related models (e.g. via select_related or joins)
-        """
+        """Do not pull in related models (e.g. via select_related or joins)"""
         return super().get_default_columns(None, None, None)
 
     def as_sql(self, with_limits=True, with_col_aliases=False):
