@@ -57,7 +57,7 @@ class SQLCompiler(compiler.SQLCompiler):
                         self.compile(self.where) if self.where is not None else ("", [])
                     )
                 except EmptyResultSet:
-                    if self.elide_empty:
+                    if getattr(self, "elide_empty", True):
                         raise
                     # Use a predicate that's always False.
                     where, w_params = "0 = 1", []
