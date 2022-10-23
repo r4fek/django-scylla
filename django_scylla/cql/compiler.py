@@ -106,7 +106,7 @@ class SQLCompiler(compiler.SQLCompiler):
                     result.append("HAVING %s" % having)
                     params.extend(h_params)
 
-            if hasattr(self.query, 'explain_info') and self.query.explain_info:
+            if hasattr(self.query, "explain_info") and self.query.explain_info:
                 result.insert(
                     0,
                     self.connection.ops.explain_query_prefix(
