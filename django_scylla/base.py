@@ -58,6 +58,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     operators = {
         "exact": "= %s",
+        "iexact": "= %s",
         "contains": "CONTAINS %s",
         "gt": "> %s",
         "gte": ">= %s",
