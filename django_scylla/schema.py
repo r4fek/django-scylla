@@ -8,6 +8,7 @@ class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
     renaming, index fiddling, and so on.
     """
 
+    sql_create_column = "ALTER TABLE %(table)s ADD %(column)s %(definition)s"
     sql_create_table = "CREATE TABLE IF NOT EXISTS %(table)s (%(definition)s)"
     sql_create_index = "CREATE INDEX IF NOT EXISTS %(name)s ON %(table)s (%(columns)s)"
     sql_delete_column = "ALTER TABLE %(table)s DROP %(column)s"
