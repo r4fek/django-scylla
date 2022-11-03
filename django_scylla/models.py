@@ -53,4 +53,9 @@ def _perform_unique_checks(self, unique_checks):
     return errors
 
 
+def _check_single_primary_key():
+    return []
+
+
 Model._perform_unique_checks = _perform_unique_checks
+Model._check_single_primary_key = _check_single_primary_key

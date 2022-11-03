@@ -1,4 +1,10 @@
+import logging
+
 from django.db.backends.base.schema import BaseDatabaseSchemaEditor
+
+from django_scylla.constraints import PrimaryKeysConstraint
+
+logger = logging.getLogger(__name__)
 
 
 class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
@@ -12,6 +18,7 @@ class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
     sql_create_table = "CREATE TABLE IF NOT EXISTS %(table)s (%(definition)s)"
     sql_create_index = "CREATE INDEX IF NOT EXISTS %(name)s ON %(table)s (%(columns)s)"
     sql_delete_column = "ALTER TABLE %(table)s DROP %(column)s"
+    sql_create_primary_keys = "PRIMARY KEY %(columns)s"
 
     def skip_default(self, field):
         return False
@@ -31,21 +38,32 @@ class DatabaseSchemaEditor(BaseDatabaseSchemaEditor):
         # Check for fields that aren't actually columns (e.g. M2M)
         if sql is None:
             return None, None
-        if field.primary_key:
-            sql += " PRIMARY KEY"
 
-        # Optionally add the tablespace if it's an implicitly indexed column
-        tablespace = field.db_tablespace or model._meta.db_tablespace
-        if (
-            tablespace
-            and self.connection.features.supports_tablespaces
-            and field.unique
-        ):
-            sql += " %s" % self.connection.ops.tablespace_sql(tablespace, inline=True)
-        # Return the sql
         return sql, params
 
+    def table_sql(self, model):
+        """Add primary key definitions"""
+        # check if PrimaryKeysConstraint is present in model._meta
+        for constraint in model._meta.constraints:
+            if isinstance(constraint, PrimaryKeysConstraint):
+                return super().table_sql(model)
+
+        # No manually added PrimaryKeysConstraint in meta. Creating then!
+        pk_fields = [f.column for f in model._meta.fields if f.primary_key]
+        model._meta.constraints.append(PrimaryKeysConstraint(fields=pk_fields))
+        sql, params = super().table_sql(model)
+        logger.debug("table_sql %s, params %s", sql, params)
+        return sql, params
+
+    def _create_primary_keys_sql(self, fields):
+        if len(fields) == 1:
+            columns = f'("{fields[0]}")'
+        else:
+            columns = str(fields).replace("'", '"')
+        return self.sql_create_primary_keys % {"columns": columns}
+
     def add_constraint(self, model, constraint):
+        logger.debug("add_constraint %s", constraint)
         ...  # TODO: fix it
 
     def alter_unique_together(self, model, old_unique_together, new_unique_together):
