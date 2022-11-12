@@ -5,3 +5,4 @@ from django_scylla.cql.query import *  # noqa: F401, F403
 from django_scylla.cql.queryset import *  # noqa: F401, F403
 from django_scylla.cql.where import *  # noqa: F401, F403
 from django_scylla.models import *  # noqa: F401, F403
+from django_scylla.options import *  # noqa: F401, F403

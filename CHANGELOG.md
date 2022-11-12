@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Add initial support for custom `Options` class (model `Meta` with scylla table options)
+- Fix disabling `INNER JOINS` in a smarter way (by disabling `select_related`)
 
 ## [0.0.9] - 2022-11-03
 ### Added
