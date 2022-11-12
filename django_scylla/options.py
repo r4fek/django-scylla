@@ -1,6 +1,6 @@
-from django.db.models.options import Options as DjangoOptions
 import django.db.models.base
 import django.db.models.options
+from django.db.models.options import Options as DjangoOptions
 
 DEFAULT_SCYLLA_NAMES = (
     "comment",
