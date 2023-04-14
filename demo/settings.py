@@ -7,6 +7,8 @@ TEMPLATE_DEBUG = True
 USE_TZ = True
 USE_L10N = True
 
+ALLOWED_HOSTS = [ "*" ]
+
 INSTALLED_APPS = (
     "django_scylla",
     "django.contrib.admin",
@@ -20,10 +22,21 @@ INSTALLED_APPS = (
 DATABASES = {
     "default": {
         "ENGINE": "django_scylla",
-        "HOST": "localhost",
+        "HOST": "scylla",
         "PORT": 9042,
-        "NAME": "demo",
-        "OPTIONS": {"request_timeout": 5, "consistency_level": ConsistencyLevel.ONE},
+        "NAME": "foobar",
+        "OPTIONS": {
+            "replication": {
+                "class": "SimpleStrategy",
+                "replication_factor": 1
+            },
+            "connection": {
+                "consistency_level": ConsistencyLevel.ONE
+            },
+            "execution_profile": {
+                "request_timeout": 5,
+            }
+        },
     },
 }
 
