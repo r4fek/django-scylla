@@ -1,3 +1,5 @@
+import json
+
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import EXEC_PROFILE_DEFAULT, ExecutionProfile, ProtocolVersion
 from cassandra.policies import RoundRobinPolicy, TokenAwarePolicy
@@ -80,7 +82,12 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     def get_connection_params(self):
         """Return a dict of parameters suitable for get_new_connection."""
+        out_params = {}
         options = self.settings_dict.get("OPTIONS", {})
+
+        connection_options = options.get("connection", {})
+        execution_profile_options = options.get("execution_profile", {})
+
         ep_keys = (
             "load_balancing_policy",
             "retry_policy",
@@ -90,35 +97,48 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             "speculative_execution_policy",
         )
 
-        if not options.get("contact_points"):
-            options["contact_points"] = self.settings_dict["HOST"].split(",")
-        if not options.get("port") and self.settings_dict.get("PORT"):
-            options["port"] = int(self.settings_dict["PORT"])
-        if options.get("auth_provider") is None and (
+        if not connection_options.get("contact_points"):
+            out_params["contact_points"] = self.settings_dict["HOST"].split(",")
+        if not connection_options.get("port") and self.settings_dict.get("PORT"):
+            out_params["port"] = int(self.settings_dict["PORT"])
+        if connection_options.get("auth_provider") is None and (
             self.settings_dict.get("USER") and self.settings_dict.get("PASSWORD")
         ):
-            options["auth_provider"] = PlainTextAuthProvider(
+            out_params["auth_provider"] = PlainTextAuthProvider(
                 username=self.settings_dict["USER"],
                 password=self.settings_dict["PASSWORD"],
             )
-        if options.get("protocol_version") is None:
-            options["protocol_version"] = self.DEFAULT_PROTOCOL_VERSION
+        if connection_options.get("protocol_version") is None:
+            out_params["protocol_version"] = self.DEFAULT_PROTOCOL_VERSION
 
-        ep_options = {k: options.pop(k, None) for k in ep_keys if options.get(k)}
+        ep_options = {k: execution_profile_options.pop(k, None) for k in ep_keys if execution_profile_options.get(k)}
         ep_options["row_factory"] = tuple_factory
         if "load_balancing_policy" not in ep_options:
             ep_options["load_balancing_policy"] = TokenAwarePolicy(RoundRobinPolicy())
 
-        options["execution_profiles"] = {
+        out_params["execution_profiles"] = {
             EXEC_PROFILE_DEFAULT: ExecutionProfile(**ep_options)
         }
-        return options
+        return out_params
 
     def get_new_connection(self, conn_params):
         """Open a connection to the database."""
         db = self.settings_dict["NAME"]
         cluster = Database.initialize(db, **conn_params)
-        return Cursor(cluster.connect(db))
+
+        cursor = Cursor(cluster.connect())
+
+        # Ensure that the exists before using it.
+        replication_options = json.dumps(self.settings_dict["OPTIONS"]["replication"]).replace("\"", "'")
+
+        cursor.execute((
+            "CREATE KEYSPACE IF NOT EXISTS {db} "
+            "WITH REPLICATION = {replication}".format(db=db, replication=replication_options)
+        ))
+
+        cursor.set_keyspace(db)
+
+        return cursor
 
     def init_connection_state(self):
         """Initialize the database connection settings."""
