@@ -86,7 +86,20 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         options = self.settings_dict.get("OPTIONS", {})
 
         connection_options = options.get("connection", {})
+        replication_options = options.get("replication", {})
         execution_profile_options = options.get("execution_profile", {})
+
+        if not replication_options.get("class"):
+            raise ValueError(
+                "Missing configuration value: OPTIONS.replication.class\n"
+                "See: https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html"  # noqa
+            )
+
+        if not replication_options.get("replication_factor"):
+            raise ValueError(
+                "Missing configuration value: OPTIONS.replication.replication_factor\n"
+                "See: https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useUpdateKeyspaceRF.html"
+            )
 
         ep_keys = (
             "load_balancing_policy",
@@ -132,21 +145,20 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
         cursor = Cursor(cluster.connect())
 
-        # Ensure that the keyspace exists before using it.
-        replication_options = json.dumps(
-            self.settings_dict["OPTIONS"]["replication"]
-        ).replace('"', "'")
+        # Ensure that the keyspace exists before using it, if possible.
+        if db is not None:
+            replication_options = json.dumps(
+                self.settings_dict["OPTIONS"]["replication"]
+            ).replace('"', "'")
 
-        cursor.execute(
-            (
-                "CREATE KEYSPACE IF NOT EXISTS {db} "
-                "WITH REPLICATION = {replication}".format(
-                    db=db, replication=replication_options
+            cursor.execute(
+                (
+                    "CREATE KEYSPACE IF NOT EXISTS {db} "
+                    "WITH REPLICATION = {replication}".format(
+                        db=db, replication=replication_options
+                    )
                 )
             )
-        )
-
-        cursor.set_keyspace(db)
 
         return cursor
 
