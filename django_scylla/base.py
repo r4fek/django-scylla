@@ -111,7 +111,11 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         if connection_options.get("protocol_version") is None:
             out_params["protocol_version"] = self.DEFAULT_PROTOCOL_VERSION
 
-        ep_options = {k: execution_profile_options.pop(k, None) for k in ep_keys if execution_profile_options.get(k)}
+        ep_options = {
+            k: execution_profile_options.pop(k, None)
+            for k in ep_keys
+            if execution_profile_options.get(k)
+        }
         ep_options["row_factory"] = tuple_factory
         if "load_balancing_policy" not in ep_options:
             ep_options["load_balancing_policy"] = TokenAwarePolicy(RoundRobinPolicy())
@@ -128,13 +132,19 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
         cursor = Cursor(cluster.connect())
 
-        # Ensure that the exists before using it.
-        replication_options = json.dumps(self.settings_dict["OPTIONS"]["replication"]).replace("\"", "'")
+        # Ensure that the keyspace exists before using it.
+        replication_options = json.dumps(
+            self.settings_dict["OPTIONS"]["replication"]
+        ).replace('"', "'")
 
-        cursor.execute((
-            "CREATE KEYSPACE IF NOT EXISTS {db} "
-            "WITH REPLICATION = {replication}".format(db=db, replication=replication_options)
-        ))
+        cursor.execute(
+            (
+                "CREATE KEYSPACE IF NOT EXISTS {db} "
+                "WITH REPLICATION = {replication}".format(
+                    db=db, replication=replication_options
+                )
+            )
+        )
 
         cursor.set_keyspace(db)
 
