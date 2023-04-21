@@ -10,6 +10,6 @@ ENV PATH="$POETRY_HOME/bin:$PATH"
 
 RUN curl -sSL https://install.python-poetry.org | python
 
-COPY . .
-
+COPY . /app
+WORKDIR /app
 RUN poetry install
