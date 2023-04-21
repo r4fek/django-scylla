@@ -5,7 +5,6 @@ from cassandra import ConsistencyLevel
 DEBUG = True
 TEMPLATE_DEBUG = True
 USE_TZ = True
-USE_L10N = True
 
 ALLOWED_HOSTS = [ "*" ]
 
