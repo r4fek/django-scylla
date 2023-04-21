@@ -19,13 +19,13 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    restart: always
+    restart: unless-stopped
 
   demo-init:
     build: .
     depends_on:
       - demo
-    restart: no
+    restart: "no"
     entrypoint: [ "bash", "-c", "poetry run python manage.py migrate"]
 
   scylla:
