@@ -24,7 +24,7 @@ DATABASES = {
         "ENGINE": "django_scylla",
         "HOST": "scylla",
         "PORT": 9042,
-        "NAME": "foobar",
+        "NAME": "demo",
         "OPTIONS": {
             "replication": {
                 "class": "SimpleStrategy",
@@ -93,6 +93,6 @@ LOGGING = {
     },
 }
 
-ROOT_URLCONF = "tests.urls"
+ROOT_URLCONF = "demo.urls"
 if not DEBUG:
     raise Exception("This settings file can only be used with DEBUG=True")

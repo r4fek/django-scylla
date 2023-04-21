@@ -1,5 +1,7 @@
 from os import path
 
+from cassandra import ConsistencyLevel
+
 DEBUG = True
 TEMPLATE_DEBUG = True
 USE_TZ = True
@@ -19,9 +21,21 @@ INSTALLED_APPS = (
 DATABASES = {
     "default": {
         "ENGINE": "django_scylla",
-        "HOST": "localhost",
+        "HOST": "scylla",
         "PORT": 9042,
         "NAME": "testdb",
+        "OPTIONS": {
+            "replication": {
+                "class": "SimpleStrategy",
+                "replication_factor": 1
+            },
+            "connection": {
+                "consistency_level": ConsistencyLevel.ONE
+            },
+            "execution_profile": {
+                "request_timeout": 5,
+            }
+        },
     },
 }
 
