@@ -1,13 +1,33 @@
 version: '3.8'
 
 services:
+
   demo:
     build: .
-    command: poetry run python manage.py runserver 8000
+    command: poetry run python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
     depends_on:
       - scylla
+    volumes:
+      - "./demo:/app/demo"
+      - "./tests:/app/tests"
+      - "./django_scylla:/app/django_scylla"
+    healthcheck:
+      test: curl -f "http://localhost:8000"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: always
+
+  demo-init:
+    build: .
+    depends_on:
+      - demo
+    restart: no
+    entrypoint: [ "bash", "-c", "poetry run python manage.py migrate"]
+
   scylla:
     image: scylladb/scylla:5.1
     command: --smp 1 --memory 750M --overprovisioned 1
@@ -17,3 +37,9 @@ services:
       - "7199:7199"
       - "9042:9042"
       - "10000:10000"
+    healthcheck:
+      test: nodetool status | grep UN
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
