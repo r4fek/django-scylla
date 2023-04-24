@@ -34,6 +34,7 @@ jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
+    container: python:3.10
     strategy:
       matrix:
         python: ['3.10']
@@ -61,10 +62,10 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python }}
+      # - name: Set up Python ${{ matrix.python }}
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: ${{ matrix.python }}
 
       - name: Install and run tox
         run: |
