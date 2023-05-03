@@ -7,6 +7,7 @@ TEMPLATE_DEBUG = True
 USE_TZ = True
 
 INSTALLED_APPS = (
+    "demo",
     "django_scylla",
     "django.contrib.admin",
     "django.contrib.auth",
