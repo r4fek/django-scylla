@@ -5,7 +5,8 @@ from cassandra import ConsistencyLevel
 DEBUG = True
 TEMPLATE_DEBUG = True
 USE_TZ = True
-USE_L10N = True
+
+ALLOWED_HOSTS = [ "*" ]
 
 INSTALLED_APPS = (
     "django_scylla",
@@ -20,10 +21,21 @@ INSTALLED_APPS = (
 DATABASES = {
     "default": {
         "ENGINE": "django_scylla",
-        "HOST": "localhost",
+        "HOST": "scylla",
         "PORT": 9042,
         "NAME": "demo",
-        "OPTIONS": {"request_timeout": 5, "consistency_level": ConsistencyLevel.ONE},
+        "OPTIONS": {
+            "replication": {
+                "class": "SimpleStrategy",
+                "replication_factor": 1
+            },
+            "connection": {
+                "consistency_level": ConsistencyLevel.ONE
+            },
+            "execution_profile": {
+                "request_timeout": 5,
+            }
+        },
     },
 }
 
@@ -80,6 +92,6 @@ LOGGING = {
     },
 }
 
-ROOT_URLCONF = "tests.urls"
+ROOT_URLCONF = "demo.urls"
 if not DEBUG:
     raise Exception("This settings file can only be used with DEBUG=True")

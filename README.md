@@ -32,11 +32,27 @@ Recommended installation:
                 'TEST_NAME': 'test_db',
                 'HOST': 'db1.example.com,db2.example.com,db3.example.com',
                 'OPTIONS': {
-                    'consistency_level': ...,
-                    'load_balancing_policy': ...,
-                    'retry_policy': ...,
-                    'request_timeout': 10,
-
+                    'replication': {
+                        'strategy_class': ...,
+                        'replication_factor': ...
+                    },
+                    'execution_profile': {
+                        'load_balancing_policy': ...,
+                        'retry_policy': ...,
+                        'consistency_level': ...,
+                        'serial_consistency_level': ...,
+                        'request_timeout': ...,
+                        'speculative_execution_policy': ...
+                    }
+                    'connection': {
+                        # Full list of connection options can be found here: https://docs.datastax.com/en/developer/python-driver/3.26/api/cassandra/cluster/
+                        'cql_version': ...,
+                        'protocol_version': ...
+                        'compression': ...,
+                        'consistency': ...,
+                        'lazy_connect': ...,
+                        'retry_connect': ...,
+                    }
                 }
             }
         }
