@@ -2,7 +2,7 @@ from time import time
 
 from django.core.exceptions import EmptyResultSet
 from django.db import NotSupportedError
-from django.db.models import AutoField
+from django.db.models import AutoField, DecimalField
 from django.db.models.sql import compiler
 
 
@@ -157,8 +157,11 @@ class SQLInsertCompiler(compiler.SQLInsertCompiler):
         self.query.fields = pk_fields + list(self.query.fields)
 
     def prepare_value(self, field, value):
-        if value is None and isinstance(field, AutoField):
+        if value is None and isinstance(field, AutoField):  # This also matches SmallAutoFields, and causes a corresponding failure
             value = unique_rowid()
+        if value is not None and isinstance(field, DecimalField):
+            # Return DecimalField values directly, as the original implementation will convert Decimal instances into strings.
+            return value
         return super().prepare_value(field, value)
 
 
