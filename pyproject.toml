@@ -42,6 +42,9 @@ pytest-cov = "*"
 pytest-django = "*"
 tox = "*"
 
+[tool.poetry.group.dev.dependencies]
+mixer = "^7.2.2"
+
 [build-system]
 requires = ["poetry>=1.1.12"]
 build-backend = "poetry.masonry.api"
