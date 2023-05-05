@@ -2,8 +2,12 @@ from time import time
 
 from django.core.exceptions import EmptyResultSet
 from django.db import NotSupportedError
-from django.db.models import AutoField, DecimalField
+from django.db.models import AutoField, BinaryField, DecimalField, DurationField
+from django.db.models.sql.datastructures import Join
 from django.db.models.sql import compiler
+
+from datetime import timedelta
+from cassandra.util import Duration
 
 
 def unique_rowid():
@@ -162,6 +166,21 @@ class SQLInsertCompiler(compiler.SQLInsertCompiler):
         if value is not None and isinstance(field, DecimalField):
             # Return DecimalField values directly, as the original implementation will convert Decimal instances into strings.
             return value
+        if value is not None and isinstance(field, BinaryField):
+            # Assume this value is already binary formatted and perform no pre-processing.
+            return value
+        if value is not None and isinstance(field, DurationField):
+            # CQL driver cannot accept timedelta objects directly, so we stringify. https://docs.scylladb.com/stable/cql/types.html#durations
+            if not isinstance(value, timedelta):
+                raise ValueError("Unexpected DurationField value! DurationField values must be timedelta objects.")
+
+            # timedelta only stores days, seconds, microseconds.
+            # The scylla driver's Duration only accepts months, days, nanoseconds.
+            _converted_seconds = value.seconds * 1e9
+            _converted_microseconds = value.microseconds * 1000
+
+            return Duration(days=value.days, nanoseconds=(_converted_seconds + _converted_microseconds))
+
         return super().prepare_value(field, value)
 
 
