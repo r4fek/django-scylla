@@ -4,7 +4,7 @@ import uuid
 import os
 
 
-LOGFILE_DIR = os.path.join(__file__, "logs/")
+LOGFILE_DIR = "./logs/"
 
 
 class Person(models.Model):
@@ -55,8 +55,16 @@ class Recipe(models.Model):
 
 
 # Models with foreign relations
-class Library(models.Model):
+class Address(models.Model):
     address = models.CharField()
+
+
+class Library(models.Model):
+    address = models.OneToOneField(
+        Address,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
 
 
 class Author(models.Model):
