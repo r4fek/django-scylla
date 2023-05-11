@@ -1,18 +1,27 @@
 from time import time
+from random import SystemRandom
+from os import getpid
 
 from django.core.exceptions import EmptyResultSet
 from django.db import NotSupportedError
 from django.db.models import AutoField, BinaryField, DecimalField, DurationField
-from django.db.models.sql.datastructures import Join
 from django.db.models.sql import compiler
 
 from datetime import timedelta
 from cassandra.util import Duration
 
 
-def unique_rowid():
-    # TODO: guarantee that this is globally unique
-    return int(time() * 1e6)
+def unique_rowid(counter={'value': 0}):
+    """Attempt to return a reasonably random integer value with no collisions.
+
+    In the future, this behavior will likely be discouraged in favor of using UUIDs.
+    """
+    counter['value'] = (counter['value'] + 1) % 1024
+    timestamp = int(time() * 1e6)
+    pid = getpid()
+    sys_random = SystemRandom().randint(0, 65535)
+
+    return timestamp + counter['value'] + pid + sys_random
 
 
 class SQLCompiler(compiler.SQLCompiler):
@@ -161,8 +170,9 @@ class SQLInsertCompiler(compiler.SQLInsertCompiler):
         self.query.fields = pk_fields + list(self.query.fields)
 
     def prepare_value(self, field, value):
-        if value is None and isinstance(field, AutoField):  # This also matches SmallAutoFields, and causes a corresponding failure
+        if value is None and isinstance(field, AutoField):
             value = unique_rowid()
+            return value
         if value is not None and isinstance(field, DecimalField):
             # Return DecimalField values directly, as the original implementation will convert Decimal instances into strings.
             return value
