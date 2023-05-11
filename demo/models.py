@@ -1,7 +1,6 @@
-from django.db import models
-
 import uuid
-import os
+
+from django.db import models
 
 
 LOGFILE_DIR = "./logs/"
@@ -17,7 +16,7 @@ class Country(models.Model):
     """Alternative Autofield test."""
 
     country_id = models.SmallAutoField(primary_key=True)
-    country_code = models.CharField()
+    country_code = models.CharField(max_length=255)
 
 
 class Recipe(models.Model):
@@ -56,7 +55,7 @@ class Recipe(models.Model):
 
 # Models with foreign relations
 class Address(models.Model):
-    address = models.CharField()
+    address = models.CharField(max_length=255)
 
 
 class Library(models.Model):
@@ -68,11 +67,11 @@ class Library(models.Model):
 
 
 class Author(models.Model):
-    name = models.CharField(unique=True)
+    name = models.CharField(max_length=255, unique=True)
 
 
 class Book(models.Model):
-    title = models.CharField()
+    title = models.CharField(max_length=255)
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE
