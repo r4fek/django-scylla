@@ -48,14 +48,13 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         "OneToOneField": "bigint",
         "PositiveBigIntegerField": "bigint",
         "PositiveIntegerField": "bigint",
-        "PositiveSmallIntegerField": "int",
-        "RelatedField": "bigint",
+        "PositiveSmallIntegerField": "smallint",
         "SlugField": "text",
-        "SmallAutoField": "int",
-        "SmallIntegerField": "int",
+        "SmallAutoField": "bigint",
+        "SmallIntegerField": "smallint",
         "TextField": "text",
         "TimeField": "time",
-        "UUIDField": "uuid",
+        "UUIDField": "uuid"
     }
 
     operators = {

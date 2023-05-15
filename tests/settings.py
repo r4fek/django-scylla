@@ -6,7 +6,12 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 USE_TZ = True
 
+ALLOWED_HOSTS = [ "*" ]
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 INSTALLED_APPS = (
+    "demo",
     "django_scylla",
     "django.contrib.admin",
     "django.contrib.auth",
