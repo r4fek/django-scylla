@@ -116,14 +116,15 @@ def test_foreign_one_to_many():
 
 @pytest.mark.django_db
 def test_foreign_many_to_many():
-    mixer.blend(Address)
+    mixer.cycle(ITERATION_COUNT).blend(Address)
     mixer.cycle(ITERATION_COUNT).blend(Author)
-    mixer.cycle(ITERATION_COUNT).blend(Library, address=mixer.SELECT)
+    mixer.cycle(ITERATION_COUNT).blend(Library, address=(x for x in Address.objects.all()))
     mixer.cycle(ITERATION_COUNT).blend(Book, libraries=None, author=mixer.SELECT)
 
     # Do these models exist?
     assert Author.objects.all().count() == ITERATION_COUNT
     assert Book.objects.all().count() == ITERATION_COUNT
+    assert Address.objects.all().count() == ITERATION_COUNT
     assert Library.objects.all().count() == ITERATION_COUNT
 
     # Grab our libraries and books
